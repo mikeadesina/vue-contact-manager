@@ -92,7 +92,7 @@
       </div>
     </div>
   </div>
-  <pre>{{ contact }}</pre>
+  <pre>{{groupId}}</pre>
 </template>
 
 <script>

@@ -4,29 +4,31 @@
       <div class="col">
         <p class="h3 text-success fw-bold">
           Contact Manager
-          <router-link to="/contacts/add" class="btn btn-success btn-sm"
-            ><i class="fa fa-plus"></i> New</router-link
-          >
+          <router-link to="/contacts/add" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> New</router-link>
         </p>
         <p class="fst-italic">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad dicta
-          dolores, excepturi harum impedit maiores similique sint soluta vel?
-          Asperiores consectetur dolores fuga fugit iste labore laborum quos
-          unde voluptate.
+          This is a crud  contact manager with vue js and node js 
         </p>
         <form>
           <div class="row">
             <div class="col-md-6">
               <div class="row">
                 <div class="col">
-                  <input
+                  <!-- <input
                     type="text"
                     class="form-control"
                     placeholder="Search Name"
-                  />
+                  /> -->
+                  <select class="form-control" v-model="groupId" name="group" placeholder="Select your Group"
+                    v-if="groups.length > 0">
+                    <option value="">Select Group</option>
+                    <option :value="group.id" v-for="group in groups" :key="group.id">
+                      {{ group.name }}
+                    </option>
+                  </select>
                 </div>
                 <div class="col">
-                  <input type="submit" class="btn btn-outline-dark" />
+                  <input type="button" @click="searchContactByGroup" class="btn btn-outline-dark"  value="Search"/>
                 </div>
               </div>
             </div>
@@ -79,25 +81,14 @@
                   </li>
                 </ul>
               </div>
-              <div
-                class="col-sm-1 d-flex flex-column justify-content-center align-items-center"
-              >
-                <router-link
-                  :to="`/contacts/view/${contact.id} `"
-                  class="btn btn-warning my-1"
-                >
+              <div class="col-sm-1 d-flex flex-column justify-content-center align-items-center">
+                <router-link :to="`/contacts/view/${contact.id} `" class="btn btn-warning my-1">
                   <i class="fa fa-eye"></i>
                 </router-link>
-                <router-link
-                  :to="`/contacts/edit/${contact.id} `"
-                  class="btn btn-warning my-1"
-                >
+                <router-link :to="`/contacts/edit/${contact.id} `" class="btn btn-warning my-1">
                   <i class="fa fa-pen"></i>
                 </router-link>
-                <button
-                  class="btn btn-danger my-1"
-                  @click="clickDeleteContact(contact.id)"
-                >
+                <button class="btn btn-danger my-1" @click="clickDeleteContact(contact.id)">
                   <i class="fa fa-trash"></i>
                 </button>
               </div>
@@ -107,6 +98,7 @@
       </div>
     </div>
   </div>
+  <!-- <pre>{{ groupId }}</pre> -->
 </template>
 
 <script>
@@ -120,7 +112,9 @@ export default {
     return {
       loading: false,
       contacts: [],
+      groups: [],
       errorMessage: null,
+      groupId: '',
     };
   },
   created: async function () {
@@ -128,6 +122,8 @@ export default {
       this.loading = true;
       let response = await ContactService.getAllContacts();
       this.contacts = response.data;
+      let groupResponse = await ContactService.getAllGroups();
+      this.groups = groupResponse.data;
       this.loading = false;
     } catch (error) {
       this.errorMessage = error;
@@ -149,8 +145,19 @@ export default {
         this.loading = false;
       }
     },
+    searchContactByGroup: function() {
+      let searchList=this.contacts.filter(contact => (contact.groupId == this.groupId));
+      if (searchList.length == 0) {
+        alert("No Record Found")
+        this.errorMessage = "No Record Found";
+        this.loading = false;
+      }
+      this.contacts=searchList;
+      console.log(searchList);
+    }
   },
 };
 </script>
+<style scoped>
 
-<style scoped></style>
+</style>

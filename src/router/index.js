@@ -25,7 +25,7 @@
 // export default router
 
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
+// import Home from "../views/Home.vue";
 import ContactManager from "../views/ContactManager.vue";
 import AddContact from "../views/AddContact.vue";
 import EditContact from "../views/EditContact.vue";
@@ -39,9 +39,9 @@ import PageNotFound from "../views/PageNotFound.vue";
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "Contact",
     redirect: "/contacts",
-    component: Home,
+    component: ContactManager,
   },
   {
     path: "/contacts",

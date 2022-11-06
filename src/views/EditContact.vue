@@ -141,14 +141,16 @@ export default {
   created: async function () {
     try {
       this.loading = true;
+      console.log(this.contact);
       let response = await ContactService.getContact(this.contactId);
       this.contact = response.data;
-      let groupResponse = await ContactService.getAllGroups(response.data);
+      let groupResponse = await ContactService.getAllGroups();
       this.groups = groupResponse.data;
       console.log(
         this.$route.params.contactId,
         response.data,
-        groupResponse.data
+        groupResponse.data,
+        this.contact
       );
       this.loading = false;
     } catch (error) {
